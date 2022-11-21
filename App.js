@@ -10,11 +10,17 @@ export default function App() {
   function startAddGoalHandler() {
     setModalIsVisible(true);
   }
+
+  function endAddGoalHandler() {
+    setModalIsVisible(false);
+  }
+
   function addGoalHandler(enteredGoalText) {
     setCourseGoals((currentCourseGoals) => [
       ...currentCourseGoals,
       { text: enteredGoalText, id: Math.random().toString() },
     ]);
+    endAddGoalHandler();
   }
 
   function deleteGoalHander(id) {
@@ -23,17 +29,22 @@ export default function App() {
       return currentCourseGoals.filter((goal) => goal.id !== id);
     });
   }
+
   return (
     //view나 text에나 style 객체 적용됨
     //기본적으로 flexbox, column을 사용함
     // 버튼은 style 프로퍼티가 없어요
     <View style={styles.appContainer}>
       <Button
-        title='Add New Goal'
-        color='#5e0acc'
+        title="Add New Goal"
+        color="#5e0acc"
         onPress={startAddGoalHandler}
       />
-      {modalIsVisible && <GoalInput onAddGoal={addGoalHandler} />}
+      <GoalInput
+        visible={modalIsVisible}
+        onAddGoal={addGoalHandler}
+        onCancel={endAddGoalHandler}
+      />
       <View style={styles.goalsContainer}>
         <FlatList
           data={courseGoals}
